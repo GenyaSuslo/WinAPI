@@ -15,8 +15,10 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
 		SendMessage(hwnd, WM_SETICON, 0, (LRESULT)hIcon);
-		//HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
+		HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
 		SetFocus(GetDlgItem(hwnd, IDC_EDIT_LOGIN));//установка курсора в окно 'Login'
+		//CHAR privet[] = {"Введите имя пользователя:"};
+		//SendMessage(0, IDC_EDIT_LOGIN, EN_CHANGE,(LPARAM)privet);
 	}
 		break;
 	case WM_COMMAND:

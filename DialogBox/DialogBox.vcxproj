@@ -137,7 +137,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="cpu_charge_icon_227135.ico" />
-    <Image Include="icon1.ico" />
     <Image Include="sign_way_direction_arrow_drag_move_icon_256205.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
