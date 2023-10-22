@@ -1,5 +1,5 @@
 ﻿#include<Windows.h>
-#include"resource.h"
+#include"resource.h"//подключение файла ресурсов
 BOOL CALLBACK DlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
@@ -16,11 +16,12 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
 		SendMessage(hwnd, WM_SETICON, 0, (LRESULT)hIcon);
 		HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
-		SetFocus(GetDlgItem(hwnd, IDC_EDIT_LOGIN));//установка курсора в окно 'Login'
+		SetFocus(GetDlgItem(hwnd, IDC_EDIT_LOGIN));//установка курсора в окно 'Login
+		CHAR privet[] = { "Введите имя пользователя:" };
+		HWND pLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
+		SetDlgItemText(hwnd, IDC_EDIT_LOGIN, "Введите имя пользователя:");
+		SendMessage(pLogin, EM_UNDO, 0, (LPARAM)privet);
 		
-		SetDlgItemTextA(hwnd, IDC_EDIT_LOGIN, "Введите имя пользователя");
-		//CHAR privet[] = {"Введите имя пользователя:"};
-		//SendMessage(hwnd, IDC_EDIT_LOGIN, EN_CHANGE,(LPARAM)privet);
 	}
 		break;
 	case WM_COMMAND:
@@ -43,7 +44,8 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SendMessage(h1Password, WM_SETTEXT, 0, (LPARAM)sz_buffer);
 		}
 			break;
-		case IDOK: MessageBox(hwnd, "Была нажата кнопка ОК", "Info", MB_OK | MB_ICONINFORMATION); break;
+		case IDOK: MessageBox(hwnd, "Была нажата кнопка ОК", "Info", MB_OK | MB_ICONINFORMATION);
+			break;
 		case IDCANCEL: EndDialog(hwnd, 0);
 		}
 		break;
