@@ -1,5 +1,7 @@
 ﻿#include<Windows.h>
 #include"resource.h"//подключение файла ресурсов
+
+CONST CHAR g_sz_LOGIN_INVINTATION[] = "Введите имя пользователя";
 BOOL CALLBACK DlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
@@ -17,16 +19,27 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		SendMessage(hwnd, WM_SETICON, 0, (LRESULT)hIcon);
 		//HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
 		SetFocus(GetDlgItem(hwnd, IDC_EDIT_PASSWORD));//установка курсора в окно 'Login
-		CHAR privet[] = { "Введите имя пользователя:" };
-		HWND pLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
-		SetDlgItemText(hwnd, IDC_EDIT_LOGIN, "Введите имя пользователя:");
-		SendMessage(pLogin, EM_CANUNDO|EM_UNDO, 0, (LPARAM)privet);
-		
+		//CHAR privet[] = { "Введите имя пользователя:" };
+		HWND hEditLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
+		//SetDlgItemText(hwnd, IDC_EDIT_LOGIN, "Введите имя пользователя:");
+		SendMessage(hEditLogin, WM_SETTEXT, 0, (LPARAM)g_sz_LOGIN_INVINTATION);
 	}
 		break;
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
+		case IDC_EDIT_LOGIN:
+		{
+			CONST INT SIZE = 256;
+			CHAR sz_buffer[SIZE]{};
+			HWND hEditLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
+			SendMessage(hEditLogin, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
+			if (HIWORD(wParam) == EN_SETFOCUS && strcmp(sz_buffer, g_sz_LOGIN_INVINTATION) == 0)//strcmp функция сравнения строк
+				SendMessage(hEditLogin, WM_SETTEXT, 0, (LPARAM)"");
+			if (HIWORD(wParam) == EN_KILLFOCUS && strcmp(sz_buffer, "") == 0)
+				SendMessage(hEditLogin, WM_SETTEXT, 0, (LPARAM)g_sz_LOGIN_INVINTATION);
+		}
+			break;
 		case IDC_BUTTON_COPY:
 		{
 			//1)создаем буфер чтения:
