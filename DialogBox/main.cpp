@@ -15,12 +15,12 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
 		SendMessage(hwnd, WM_SETICON, 0, (LRESULT)hIcon);
-		HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
-		SetFocus(GetDlgItem(hwnd, IDC_EDIT_LOGIN));//установка курсора в окно 'Login
+		//HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
+		SetFocus(GetDlgItem(hwnd, IDC_EDIT_PASSWORD));//установка курсора в окно 'Login
 		CHAR privet[] = { "Введите имя пользователя:" };
 		HWND pLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
 		SetDlgItemText(hwnd, IDC_EDIT_LOGIN, "Введите имя пользователя:");
-		SendMessage(pLogin, EM_UNDO, 0, (LPARAM)privet);
+		SendMessage(pLogin, EM_CANUNDO|EM_UNDO, 0, (LPARAM)privet);
 		
 	}
 		break;
@@ -29,11 +29,11 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 		case IDC_BUTTON_COPY:
 		{
-			//1)создаем буффер чтения:
+			//1)создаем буфер чтения:
 			CONST INT SIZE = 256;
 			CHAR sz_buffer[SIZE] = {};
 			//2) получаем обработчик окна текстовых полей 'Login' 'Password'
-			HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);//функция GetDlgItem() по ID-ресурса дочернего окна возвращает HWND соответсвующего дочернего окна
+			HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);//функция GetDlgItem() по ID-ресурса дочернего окна возвращает HWND(Head WiNDow parent) соответсвующего дочернего окна
 			HWND hPassword = GetDlgItem(hwnd, IDC_EDIT_PASSWORD);
 			HWND h1Password = GetDlgItem(hwnd, IDC_STATIC_PASWORD);
 			//3)читаем текст из текстового поля
