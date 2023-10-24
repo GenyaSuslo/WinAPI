@@ -28,7 +28,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
-		case IDC_EDIT_LOGIN:
+		case IDC_EDIT_LOGIN:  
 		{
 			CONST INT SIZE = 256;
 			CHAR sz_buffer[SIZE]{};
@@ -46,7 +46,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			CONST INT SIZE = 256;
 			CHAR sz_buffer[SIZE] = {};
 			//2) получаем обработчик окна текстовых полей 'Login' 'Password'
-			HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);//функция GetDlgItem() по ID-ресурса дочернего окна возвращает HWND(Head WiNDow parent) соответсвующего дочернего окна
+			HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);//функция GetDlgItem() по ID-ресурса дочернего окна возвращает HWND соответсвующего дочернего окна
 			HWND hPassword = GetDlgItem(hwnd, IDC_EDIT_PASSWORD);
 			HWND h1Password = GetDlgItem(hwnd, IDC_STATIC_PASWORD);
 			//3)читаем текст из текстового поля
