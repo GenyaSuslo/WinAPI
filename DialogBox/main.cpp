@@ -17,7 +17,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON1));
 		SendMessage(hwnd, WM_SETICON, 0, (LRESULT)hIcon);
-		//HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
+		//HWND hLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);//вызов функции прописан сразу в SetFocus
 		SetFocus(GetDlgItem(hwnd, IDC_EDIT_PASSWORD));//установка курсора в окно 'Login
 		//CHAR privet[] = { "Введите имя пользователя:" };
 		HWND hEditLogin = GetDlgItem(hwnd, IDC_EDIT_LOGIN);
