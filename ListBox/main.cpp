@@ -31,16 +31,31 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
 			case IDOK:
 				{
-				CONST INT SIZE = 256;
-				CHAR sz_buffer[SIZE] = {};
-				HWND hList = GetDlgItem(hwnd, IDC_LIST1);
-				int i = SendMessage(hList, LB_GETCURSEL, 0, 0);
-				SendMessage(hList, LB_GETTEXT, i, (LPARAM)sz_buffer);
-				CHAR sz_message[SIZE]{};
-				sprintf(sz_message, "Вы выбрали элемент № %i, со значением \"%s\"", i, sz_buffer);
-				MessageBox(hwnd, sz_message, "info", MB_OK | MB_ICONINFORMATION);
+					CONST INT SIZE = 256;
+					CHAR sz_buffer[SIZE] = {};
+					HWND hList = GetDlgItem(hwnd, IDC_LIST1);
+					int i = SendMessage(hList, LB_GETCURSEL, 0, 0);
+					SendMessage(hList, LB_GETTEXT, i, (LPARAM)sz_buffer);
+					CHAR sz_message[SIZE]{};
+					sprintf(sz_message, "Вы выбрали элемент № %i, со значением \"%s\"", i, sz_buffer);
+					MessageBox(hwnd, sz_message, "info", MB_OK | MB_ICONINFORMATION);
 				}
 				break;
+			case IDC_LIST1:
+			{
+				if (HIWORD(wParam) == LBN_DBLCLK)
+				{
+					CONST INT SIZE = 256;
+					CHAR sz_buffer[SIZE] = {};
+					HWND hList = GetDlgItem(hwnd, IDC_LIST1);
+					int i = SendMessage(hList, LB_GETCURSEL, 0, 0);
+					SendMessage(hList, LB_GETTEXT, i, (LPARAM)sz_buffer);
+					CHAR sz_message[SIZE]{};
+					sprintf(sz_message, "Вы выбрали элемент № %i, со значением \"%s\"", i, sz_buffer);
+					MessageBox(hwnd, sz_message, "info", MB_OK | MB_ICONINFORMATION);
+				}
+				break;
+			}
 			case IDCANCEL:EndDialog(hwnd, 0);
 				break;
 			}
