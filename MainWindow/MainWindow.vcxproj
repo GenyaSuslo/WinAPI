@@ -136,7 +136,9 @@
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="idea_light_bulb_icon_179853.ico" />
     <Image Include="ocean_water_shark_fish_sea_nature_icon_131610.ico" />
+    <Image Include="pie_chart_icon_179859.ico" />
     <Image Include="pirate_skull_skeleton_danger_head_bone_dead_crossbones_horror_icon_131575.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -36,5 +36,11 @@
     <Image Include="pirate_skull_skeleton_danger_head_bone_dead_crossbones_horror_icon_131575.ico">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="idea_light_bulb_icon_179853.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="pie_chart_icon_179859.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

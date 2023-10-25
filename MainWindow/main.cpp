@@ -35,7 +35,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 		}
 
 	//2)Создание окна
-	HWND hwnd = CreateWindowExA		//в google пишем CreateWindowEx - LearnMicrosoft.Com
+	HWND hwnd = CreateWindowEx	//в google пишем CreateWindowEx - LearnMicrosoft.Com
 	(
 		NULL,					//ExStyle
 		g_sz_WINDOW_CLASS,		//ClassName
@@ -67,22 +67,32 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 			DispatchMessage(&msg);
 		}
 		return msg.wParam;
+
+		
+
+		
 }
 //------------------------------------------
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
-		case WM_CREATE:
-			break;
-		case WM_COMMAND:
-			break;
-		case WM_DESTROY:PostQuitMessage(0);
-			break;
-		case WM_CLOSE:	DestroyWindow(hwnd);
-			break;
-		default:		return DefWindowProc(hwnd, uMsg, wParam, lParam);
+	case WM_CREATE:
+	{
+		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON_LAMP));
+		HICON hIconSm = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_ICON_PIE));
+		SendMessage(hwnd, WM_SETICON, 0, (LPARAM)hIcon);
+
+	}
+	break;
+	case WM_COMMAND:
+		break;
+	case WM_DESTROY:PostQuitMessage(0);
+		break;
+	case WM_CLOSE:	DestroyWindow(hwnd);
+		break;
+	default:		return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
 
 	return NULL;
-}
+	};
