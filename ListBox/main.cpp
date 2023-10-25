@@ -43,8 +43,8 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				break;
 			case IDC_LIST1:
 			{
-				if (HIWORD(wParam) == LBN_DBLCLK)
-				{
+				if (HIWORD(wParam) == LBN_DBLCLK)SendMessage(hwnd, WM_COMMAND, IDOK, 0);
+				/*{
 					CONST INT SIZE = 256;
 					CHAR sz_buffer[SIZE] = {};
 					HWND hList = GetDlgItem(hwnd, IDC_LIST1);
@@ -53,7 +53,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					CHAR sz_message[SIZE]{};
 					sprintf(sz_message, "Вы выбрали элемент № %i, со значением \"%s\"", i, sz_buffer);
 					MessageBox(hwnd, sz_message, "info", MB_OK | MB_ICONINFORMATION);
-				}
+				}*/
 				break;
 			}
 			case IDCANCEL:EndDialog(hwnd, 0);

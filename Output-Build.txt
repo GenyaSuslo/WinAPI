@@ -1,0 +1,9 @@
+﻿Build started...
+1>------ Build started: Project: ListBox, Configuration: Debug x64 ------
+1>main.cpp
+1>C:\Users\susle\source\repos\WinAPI\ListBox\main.cpp(37,12): warning C4244: 'initializing': conversion from 'LRESULT' to 'int', possible loss of data
+1>C:\Users\susle\source\repos\WinAPI\ListBox\main.cpp(51,12): warning C4244: 'initializing': conversion from 'LRESULT' to 'int', possible loss of data
+1>ListBox.vcxproj -> C:\Users\susle\source\repos\WinAPI\x64\Debug\ListBox.exe
+1>Done building project "ListBox.vcxproj".
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
+========== Build started at 2:25 PM and took 03,761 seconds ==========
