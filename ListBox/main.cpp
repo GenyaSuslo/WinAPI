@@ -55,7 +55,6 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				CHAR sz_buffer[SIZE]{};
 				HWND text = GetDlgItem(hwnd, IDC_EDIT1);
 				HWND list = GetDlgItem(hwnd, IDC_LIST1);
-				DialogBoxParam(, MAKEINTRESOURCE(IDD_DIALOG1), list, (DLGPROC)DlgProc1, 0);
 				SendMessage(text, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
 				SendMessageA(list, LB_ADDSTRING, 0, (LPARAM)sz_buffer);
 
@@ -85,29 +84,29 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	return FALSE;
 }
-BOOL CALLBACK DlgProc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	switch (uMsg)
-	{
-		case WM_INITDIALOG:
-			break;
-
-		case WM_COMMAND:
-		{
-			switch LOWORD(wParam)
-			{
-			case IDOK:
-			{
-
-			}
-				break;
-			case IDCANCEL:EndDialog(hwnd, 0);
-				break;
-			}
-		}
-
-		case WM_CLOSE:EndDialog(hwnd, 0);
-			break;
-	}
-	return FALSE;
-}
+//BOOL CALLBACK DlgProc1(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+//{
+//	switch (uMsg)
+//	{
+//		case WM_INITDIALOG:
+//			break;
+//
+//		case WM_COMMAND:
+//		{
+//			switch LOWORD(wParam)
+//			{
+//			case IDOK:
+//			{
+//
+//			}
+//				break;
+//			case IDCANCEL:EndDialog(hwnd, 0);
+//				break;
+//			}
+//		}
+//
+//		case WM_CLOSE:EndDialog(hwnd, 0);
+//			break;
+//	}
+//	return FALSE;
+//}
