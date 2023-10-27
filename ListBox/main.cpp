@@ -57,8 +57,6 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				HWND list = GetDlgItem(hwnd, IDC_LIST1);
 				SendMessage(text, WM_GETTEXT, SIZE, (LPARAM)sz_buffer);
 				SendMessageA(list, LB_ADDSTRING, 0, (LPARAM)sz_buffer);
-
-
 			}
 			break;
 			case IDC_BUTTON_DELETE:

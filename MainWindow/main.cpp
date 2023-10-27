@@ -16,8 +16,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wc.cbClsExtra = 0;	//Дополнительные Байты класса окна
 	wc.style = 0;	//Стиль окна
 
-	wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_RAM));
-	wc.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_CPU));	//Sm - small
+	wc.hIcon = (HICON)LoadImage(hInstance, "pie_chart_icon_179859.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);				 //=LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_RAM));
+	wc.hIconSm = (HICON)LoadImage(hInstance, "idea_light_bulb_icon_179853.ico", IMAGE_ICON, LR_DEFAULTSIZE, LR_DEFAULTSIZE, LR_LOADFROMFILE);			//=LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_CPU));	//Sm - small
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = HBRUSH(COLOR_WINDOW + 1);
 
