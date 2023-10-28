@@ -43,4 +43,10 @@
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="cursor1.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Glitched Cursor.ani" />
+  </ItemGroup>
 </Project>

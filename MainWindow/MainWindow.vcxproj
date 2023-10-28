@@ -141,6 +141,10 @@
     <Image Include="pie_chart_icon_179859.ico" />
     <Image Include="pirate_skull_skeleton_danger_head_bone_dead_crossbones_horror_icon_131575.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="cursor1.cur" />
+    <None Include="Glitched Cursor.ani" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
