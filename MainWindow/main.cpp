@@ -1,25 +1,28 @@
-#define _CRT_SECURE_NO_WARNINGS
+п»ї#define _CRT_SECURE_NO_WARNINGS
 #include<Windows.h>
 #include"resource.h"
+#include<vector>
+#include<string>
 
 #define IDC_COMBO	1001
 #define IDC_BUTTON_APPLY	1002
 CONST CHAR* g_CURSOR[] = { "Zerg.cur", "Protoss.cur", "Terran.cur" };
 
-CONST CHAR g_sz_WINDOW_CLASS[] = "My Window Class"; //имя класса окна
+CONST CHAR g_sz_WINDOW_CLASS[] = "My Window Class"; //РёРјСЏ РєР»Р°СЃСЃР° РѕРєРЅР°
+std::vector<std::string> LoadCursorFromDir(const std::string& directori);
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {	
-	//1) Регистрация класса окна
+	//1) Р РµРіРёСЃС‚СЂР°С†РёСЏ РєР»Р°СЃСЃР° РѕРєРЅР°
 	WNDCLASSEX wc;
 	ZeroMemory(&wc, sizeof(wc));
 	
 	wc.cbSize = sizeof(wc);
-	//cb - count bytes (Количество байт)
-	wc.cbWndExtra = 0;	//Дополнительные байты окна
-	wc.cbClsExtra = 0;	//Дополнительные Байты класса окна
-	wc.style = 0;	//Стиль окна
+	//cb - count bytes (РљРѕР»РёС‡РµСЃС‚РІРѕ Р±Р°Р№С‚)
+	wc.cbWndExtra = 0;	//Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ Р±Р°Р№С‚С‹ РѕРєРЅР°
+	wc.cbClsExtra = 0;	//Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ Р‘Р°Р№С‚С‹ РєР»Р°СЃСЃР° РѕРєРЅР°
+	wc.style = 0;	//РЎС‚РёР»СЊ РѕРєРЅР°
 
 	//=LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_RAM));
 	//=LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON_CPU));	//Sm - small
@@ -29,10 +32,10 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wc.hCursor = (HCURSOR)LoadImage(hInstance,"Spongebob - Normal Select.ani",IMAGE_CURSOR,LR_DEFAULTSIZE,LR_DEFAULTSIZE,LR_LOADFROMFILE);
 	wc.hbrBackground = HBRUSH(COLOR_WINDOW + 1);
 
-	wc.hInstance = hInstance; //hInstance - экземпляр исполняемого файла программы в памяти
-	//Функция WinMain() принимает hInstance как параметр, по этому к нему есть прямой доступ,
-	//В любой другой функции hInstance всегда можно получить при помощи функции GetModuleHandle(NULL)
-	wc.lpfnWndProc = WndProc;	//указатель на процедуру окна
+	wc.hInstance = hInstance; //hInstance - СЌРєР·РµРјРїР»СЏСЂ РёСЃРїРѕР»РЅСЏРµРјРѕРіРѕ С„Р°Р№Р»Р° РїСЂРѕРіСЂР°РјРјС‹ РІ РїР°РјСЏС‚Рё
+	//Р¤СѓРЅРєС†РёСЏ WinMain() РїСЂРёРЅРёРјР°РµС‚ hInstance РєР°Рє РїР°СЂР°РјРµС‚СЂ, РїРѕ СЌС‚РѕРјСѓ Рє РЅРµРјСѓ РµСЃС‚СЊ РїСЂСЏРјРѕР№ РґРѕСЃС‚СѓРї,
+	//Р’ Р»СЋР±РѕР№ РґСЂСѓРіРѕР№ С„СѓРЅРєС†РёРё hInstance РІСЃРµРіРґР° РјРѕР¶РЅРѕ РїРѕР»СѓС‡РёС‚СЊ РїСЂРё РїРѕРјРѕС‰Рё С„СѓРЅРєС†РёРё GetModuleHandle(NULL)
+	wc.lpfnWndProc = WndProc;	//СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РїСЂРѕС†РµРґСѓСЂСѓ РѕРєРЅР°
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = g_sz_WINDOW_CLASS;
 
@@ -42,19 +45,30 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 			return 0;
 		}
 
-	//2)Создание окна
-	HWND hwnd = CreateWindowEx	//в google пишем CreateWindowEx - LearnMicrosoft.Com
+	//2)РЎРѕР·РґР°РЅРёРµ РѕРєРЅР°
+		INT screen_width = GetSystemMetrics(SM_CXSCREEN);
+		INT screen_height = GetSystemMetrics(SM_CYSCREEN);
+		//CHAR sz_msg[MAX_PATH]{};
+		//sprintf(sz_msg, "Resolution: %ix%i", screen_width, screen_height);
+		//MessageBox(NULL, sz_msg, "Screen resolution", MB_OK);
+		INT window_width = screen_width * 3 / 4;
+		INT window_height = screen_height * 3 / 4;
+
+		INT start_x = screen_width / 8;
+		INT start_y = screen_height / 8;
+		
+	HWND hwnd = CreateWindowEx	//РІ google РїРёС€РµРј CreateWindowEx - LearnMicrosoft.Com
 	(
 		NULL,					//ExStyle
 		g_sz_WINDOW_CLASS,		//ClassName
 		g_sz_WINDOW_CLASS,		//Window Name
-		WS_OVERLAPPEDWINDOW,	//у главного окна всегда будет такой стиль
-		CW_USEDEFAULT, CW_USEDEFAULT,	//Position - положение окна на экране
-		CW_USEDEFAULT, CW_USEDEFAULT,	//Size - размер окна на экране
-		NULL,					// Parent window - родительское окно
+		WS_OVERLAPPEDWINDOW,	//Сѓ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° РІСЃРµРіРґР° Р±СѓРґРµС‚ С‚Р°РєРѕР№ СЃС‚РёР»СЊ
+		start_x, start_y,	//Position - РїРѕР»РѕР¶РµРЅРёРµ РѕРєРЅР° РЅР° СЌРєСЂР°РЅРµ
+		window_width, window_height,	//Size - СЂР°Р·РјРµСЂ РѕРєРЅР° РЅР° СЌРєСЂР°РЅРµ
+		NULL,					// Parent window - СЂРѕРґРёС‚РµР»СЊСЃРєРѕРµ РѕРєРЅРѕ
 		//____________
-		NULL,	 //hMenu для главного окна этот параметр содержит ID_ресурса меню
-				//для дочернего окна, которое является элементом другого окна, в hMenu передается ID_ресурса этого элемента
+		NULL,	 //hMenu РґР»СЏ РіР»Р°РІРЅРѕРіРѕ РѕРєРЅР° СЌС‚РѕС‚ РїР°СЂР°РјРµС‚СЂ СЃРѕРґРµСЂР¶РёС‚ ID_СЂРµСЃСѓСЂСЃР° РјРµРЅСЋ
+				//РґР»СЏ РґРѕС‡РµСЂРЅРµРіРѕ РѕРєРЅР°, РєРѕС‚РѕСЂРѕРµ СЏРІР»СЏРµС‚СЃСЏ СЌР»РµРјРµРЅС‚РѕРј РґСЂСѓРіРѕРіРѕ РѕРєРЅР°, РІ hMenu РїРµСЂРµРґР°РµС‚СЃСЏ ID_СЂРµСЃСѓСЂСЃР° СЌС‚РѕРіРѕ СЌР»РµРјРµРЅС‚Р°
 		//_____________
 		hInstance,
 		NULL
@@ -67,7 +81,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	ShowWindow(hwnd, nCmdShow);
 	UpdateWindow(hwnd);
 
-	//3) Запуск цикла сообщений
+	//3) Р—Р°РїСѓСЃРє С†РёРєР»Р° СЃРѕРѕР±С‰РµРЅРёР№
 	MSG msg;
 		while(GetMessage(&msg, 0, 0, 0)>0)
 		{
@@ -93,7 +107,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			NULL,
 			"ComboBox",
 			"",
-			WS_CHILD | WS_VISIBLE | CBN_DROPDOWN,
+			WS_CHILD | WS_VISIBLE |CBS_DROPDOWN| WS_VSCROLL,
 			10, 10,
 			200, 200,
 			hwnd,
@@ -101,9 +115,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
-		for (int i = 0; i < sizeof(g_CURSOR) / sizeof(g_CURSOR[0]); i++)
+		/*for (int i = 0; i < sizeof(g_CURSOR) / sizeof(g_CURSOR[0]); i++)
 		{
 			SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)g_CURSOR[i]);
+		}*/
+		std::vector<std::string>cursor = LoadCursorFromDir("StarCraftOriginal\\*");
+		for (int i = 0; i < cursor.size();i++)
+		{
+			SendMessage(hCombo, CB_ADDSTRING, 0, (LPARAM)cursor[i].c_str());
 		}
 		HWND hMutton = CreateWindowEx
 		(
@@ -120,6 +139,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		);
 	}
 	break;
+	case WM_SIZE:
+	case WM_MOVE:
+	{
+		RECT rect;
+		GetWindowRect(hwnd, &rect);
+		CHAR sz_message[MAX_PATH]{};
+		sprintf(
+			sz_message, "%s - Position: %ix%i, Size: %ix%i",
+			g_sz_WINDOW_CLASS, rect.left, rect.top,
+			rect.right-rect.left, rect.bottom-rect.top
+		);
+		SendMessage(hwnd, WM_SETTEXT, 0, (LPARAM)sz_message);
+
+	}
+	break;
 	case WM_COMMAND:
 		switch(LOWORD(wParam))
 	case IDC_BUTTON_APPLY:
@@ -130,8 +164,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			CHAR sz_filepath[_MAX_PATH]= "StarCraftOriginal\\";
 			SendMessage(hCombo, CB_GETLBTEXT, i, (LPARAM)sz_filename);
 			strcat(sz_filepath, sz_filename);
-			MessageBox(hwnd, sz_filepath, "info", MB_OK);
-			HCURSOR hCursor = (HCURSOR)LoadImage
+			//MessageBox(hwnd, sz_filepath, "info", MB_OK);
+			//HCURSOR 
+			hCursor = (HCURSOR)LoadImage
 			(
 				GetModuleHandle(NULL),
 				sz_filepath,
@@ -139,8 +174,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				LR_DEFAULTSIZE, LR_DEFAULTSIZE,
 				LR_LOADFROMFILE
 			);
+			SetClassLong(hwnd, GCLP_HCURSOR, (LONG)hCursor);
+			SetClassLong(GetDlgItem(hwnd,IDC_BUTTON_APPLY), GCLP_HCURSOR, (LONG)hCursor);
+			SetClassLong(GetDlgItem(hwnd,IDC_COMBO), GCLP_HCURSOR, (LONG)hCursor);
 			//SendMessage(hCombo,WM_SETCURSOR,)
-			SetCursor(hCursor);
+			//SetCursor(hCursor);
+			return FALSE;
 
 		}
 		break;
@@ -162,7 +201,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			LR_LOADFROMFILE
 		);
 		SetCursor(hCursor);
-
 	}
 	break;*/
 	case WM_DESTROY:PostQuitMessage(0);
@@ -174,3 +212,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	return NULL;
 	};
+std::vector<std::string> LoadCursorFromDir(const std::string& directori)
+{
+	WIN32_FIND_DATA data;
+	std::vector<std::string>files;
+	for (
+		HANDLE hFind = FindFirstFile(directori.c_str(), &data);
+		FindNextFile(hFind, &data);
+		)
+	{
+		//const char* std::string::c.str() РІРѕР·РІСЂР°С‰Р°РµС‚ РЎ-string С…СЂР°РЅСЏС‰РёР№СЃСЏ РІ РѕР±СЉРµРєС‚Рµ std::string
+		if (
+			strcmp(strrchr(data.cFileName, '.'), ".cur") == 0||
+			strcmp(strrchr(data.cFileName, '.'), ".ani") == 0
+		)
+			files.push_back(data.cFileName);
+	}
+	return files;
+
+
+
+}
