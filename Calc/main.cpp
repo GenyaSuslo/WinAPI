@@ -1,6 +1,8 @@
 #include<Windows.h>
 #include"resource.h"
 
+#define IDC_COMBO	1001
+
 CONST CHAR g_sz_CALC[] = "Calc";
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -33,8 +35,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 	INT screen_width = GetSystemMetrics(SM_CXSCREEN);
 	INT screen_height = GetSystemMetrics(SM_CYSCREEN);
-	INT window_width = screen_width * 0.1;
-	INT window_height = screen_height * 0.1;
+	INT window_width = screen_width * 0.25;
+	INT window_height = screen_height * 0.6;
 	INT start_x = screen_width / 8;
 	INT start_y = screen_height / 8;
 
@@ -79,15 +81,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			NULL,
 			"EditControl",
 			"",
-
-
-
-		)
+			WS_CHILD | WS_VISIBLE| CBS_DROPDOWN,
+			10, 10,
+			100, 100,
+			hwnd,
+			(HMENU)IDC_COMBO,
+			GetModuleHandle(NULL),
+			NULL
+		);
 	}
 	break;
-
-
+	case WM_COMMAND:
+		break;
+	case WM_DESTROY:PostQuitMessage(0);
+		break;
+	case WM_CLOSE: DestroyWindow(hwnd);
+		break;
+	default: return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
-
+	return NULL;
 
 }
