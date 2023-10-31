@@ -1,7 +1,8 @@
 #include<Windows.h>
 #include"resource.h"
 
-#define IDC_COMBO	1001
+#define IDC_EDIT	1003
+#define IDC_BUTTON	1002
 
 CONST CHAR g_sz_CALC[] = "Calc";
 
@@ -19,8 +20,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 	wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	wc.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
-	wc.hCursor = 0;
-	wc.hbrBackground = HBRUSH(COLOR_WINDOW + 1);
+	wc.hCursor = LoadCursor(NULL,IDC_ARROW);
+	wc.hbrBackground = HBRUSH(COLOR_WINDOW + 2);
 	
 	wc.hInstance = hInstance;
 	wc.lpfnWndProc = WndProc;
@@ -35,8 +36,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 	INT screen_width = GetSystemMetrics(SM_CXSCREEN);
 	INT screen_height = GetSystemMetrics(SM_CYSCREEN);
-	INT window_width = screen_width * 0.25;
-	INT window_height = screen_height * 0.6;
+	INT window_width = screen_width * 0.16;
+	INT window_height = screen_height * 0.35;
 	INT start_x = screen_width / 8;
 	INT start_y = screen_height / 8;
 
@@ -79,16 +80,48 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		HWND hEdit = CreateWindowEx
 		(
 			NULL,
-			"EditControl",
-			"",
-			WS_CHILD | WS_VISIBLE| CBS_DROPDOWN,
-			10, 10,
-			100, 100,
+			"Edit",
+			"input",
+			WS_CHILD | WS_VISIBLE|ES_CENTER,
+			10, 20,
+			250, 30,
 			hwnd,
-			(HMENU)IDC_COMBO,
+			(HMENU)IDC_EDIT,
 			GetModuleHandle(NULL),
 			NULL
 		);
+		for (int i = 0; i < 3; i++)
+		{
+			int x_pos = 0;
+			int y_pos = 65;
+			HWND hButoon = CreateWindowEx
+		(
+			NULL,
+			"Button",
+			"1",
+			WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+			x_pos+=y_pos, 60,
+			50, 40,
+			hwnd,
+			(HMENU)IDC_BUTTON,
+			GetModuleHandle(NULL),
+			NULL
+		);
+		}
+		
+		/*HWND hButoon = CreateWindowEx
+		(
+			NULL,
+			"Button",
+			"2",
+			WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+			70, 60,
+			50, 40,
+			hwnd,
+			(HMENU)IDC_BUTTON,
+			GetModuleHandle(NULL),
+			NULL
+		);*/
 	}
 	break;
 	case WM_COMMAND:
