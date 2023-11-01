@@ -1,4 +1,5 @@
 #include<Windows.h>
+#include<iostream>
 #include"resource.h"
 
 #define IDC_EDIT	1003
