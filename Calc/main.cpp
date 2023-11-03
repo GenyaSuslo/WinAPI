@@ -2,6 +2,7 @@
 #include<Windows.h>
 #include<iostream>
 #include"resource.h"
+#include<stdio.h>
 
 CONST CHAR g_sz_CLASSNAME[] = "Calc";
 
@@ -81,6 +82,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	static DOUBLE a=0, b=0;
+	static INT operation = 0;
+	static BOOL input=false;//отслеживает ввод чисел
+	static BOOL input_operation=false;//отслеживает ввод операции
+
 	switch (uMsg)
 	{
 	case WM_CREATE:
@@ -184,9 +190,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	break;
 	case WM_COMMAND:
 	{
+			HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
+		//				Digits & point
 		if (LOWORD(wParam) >= IDC_BUTTON_0 && LOWORD(wParam) <= IDC_BUTTON_9 || LOWORD(wParam) == IDC_BUTTON_POINT)
 		{
-			HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
+			if (!input)SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)"");
 			CHAR sz_buffer[MAX_PATH]{};
 			SendMessage(hEdit, WM_GETTEXT, MAX_PATH, (LPARAM)(sz_buffer));
 			if (strcmp(sz_buffer, "input") == 0)
@@ -201,9 +209,56 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			sz_digit[0] = '.';
 			}
 
-			else sz_digit[0] = LOWORD(wParam) - IDC_BUTTON_0 + 48;
+			else sz_digit[0] = LOWORD(wParam) - IDC_BUTTON_0 + 48;//присвоение цифр кнопкам(id кнопки - id 0 + 48)c 48 начинаются цифры в ASСII
 			strcat(sz_buffer, sz_digit);
 			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)sz_buffer);
+			input = true;
+		}
+		//				Operations:
+		if (LOWORD(wParam) >= IDC_BUTTON_PLUS && LOWORD(wParam) <= IDC_BUTTON_SLASH)
+		{
+			if (input)
+			{
+				CHAR sz_buffer[MAX_PATH]{};
+				SendMessage(hEdit, WM_GETTEXT, MAX_PATH, (LPARAM)sz_buffer);
+				b = atof(sz_buffer);
+				input=false;
+				if (a == 0)a = b;
+			}
+			input = false;
+			if (input_operation)SendMessage(hwnd, WM_COMMAND, IDC_BUTTON_EQUAL,0);
+			operation = LOWORD(wParam);
+			input_operation = true;
+		}
+		if (LOWORD(wParam) == IDC_BUTTON_EQUAL)
+		{
+			if (input)
+			{
+				CHAR sz_buffer[MAX_PATH]{};
+				SendMessage(hEdit, WM_GETTEXT, MAX_PATH, (LPARAM)sz_buffer);
+				b = atof(sz_buffer);
+				input = false;
+				if (a == 0)a = b;
+			}
+			switch (operation)
+			{
+			case IDC_BUTTON_PLUS:	a += b;	break;
+			case IDC_BUTTON_MINUS:	a -= b;	break;
+			case IDC_BUTTON_ASTER:	a *= b;	break;
+			case IDC_BUTTON_SLASH:	a /= b;	break;
+			}
+			input_operation = false;
+			CHAR sz_buffer[MAX_PATH]{};
+			sprintf(sz_buffer, "%g", a);
+			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)sz_buffer);
+		}
+		if(LOWORD(wParam)==IDC_BUTTON_CLEAR)
+		{
+			a = b = 0;
+			operation = 0;
+			input = false;
+			input_operation = false;
+			SendMessage(hEdit, WM_SETTEXT, 0, (LPARAM)"");
 		}
 	}
 		break;
