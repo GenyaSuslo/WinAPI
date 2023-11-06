@@ -9,20 +9,25 @@ CONST CHAR g_sz_CLASSNAME[] = "Calc";
 CONST INT START_X = 10;
 CONST INT START_Y = 10;
 
-CONST INT BUTTON_SIZE = 50;
+CONST INT BUTTON_SIZE = 80;
 CONST INT INTERVAL = 5;
 CONST INT BUTTON_DOUBLE_SIZE = BUTTON_SIZE * 2 + INTERVAL;
 
 CONST INT SCREEN_WIDTH = BUTTON_SIZE * 5 + INTERVAL * 4;
-CONST INT SCREEN_HEIGHT = 20;
+CONST INT SCREEN_HEIGHT = 50;
 
+CONST CHAR DISPLAY_FONT[] = "Tahoma";
+CONST INT DISPLAY_FONT_HEIGHT = SCREEN_HEIGHT - 2;
+CONST INT DISPLAY_FONT_WIDTH = DISPLAY_FONT_HEIGHT / 2.5;
 
 CONST INT BUTTON_START_X = START_X;
 CONST INT BUTTON_START_Y = START_Y + SCREEN_HEIGHT + INTERVAL * 2;
 
 CONST CHAR* OPERATIONS[] = { "/", "*", "-", "+" };
+CONST CHAR* BUTTON_NAMES[] = { "point","plus","minus","aster","slash","equal" };
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+VOID SetSkin(HWND hwnd, CONST CHAR sz_skin[]);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, INT nCmdShow)
 {
@@ -37,7 +42,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, IN
 	wc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	wc.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = HBRUSH(COLOR_WINDOW);
+	/*wc.hbrBackground = HBRUSH(COLOR_WINDOW);*/
+	wc.hbrBackground = CreateSolidBrush(RGB(0,0,255));
 
 	wc.hInstance = hInstance;
 	wc.lpfnWndProc = WndProc;
@@ -97,7 +103,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			NULL,
 			"Edit",
 			"input",
-			WS_CHILDWINDOW | WS_VISIBLE | ES_RIGHT | ES_READONLY | WS_BORDER,
+			WS_CHILDWINDOW | WS_VISIBLE | ES_RIGHT /*| ES_READONLY | WS_BORDER*/,
 			START_X, START_Y,
 			SCREEN_WIDTH, SCREEN_HEIGHT,
 			hwnd,
@@ -105,6 +111,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
+
+		HFONT hFont = CreateFont
+		(
+			DISPLAY_FONT_HEIGHT,DISPLAY_FONT_WIDTH,
+			GM_ADVANCED,0,600,	//escapement,orientation,weingh
+			FALSE,FALSE,FALSE,	//Italic - курсив, Underline - подчеркнутый, Strikeout - перечеркнутый
+			DEFAULT_CHARSET,	//кодировка
+			OUT_CHARACTER_PRECIS,
+			CLIP_CHARACTER_PRECIS,
+			ANTIALIASED_QUALITY,
+			DEFAULT_PITCH|FF_DONTCARE,
+			DISPLAY_FONT
+		);
+		SendMessage(hEdit, WM_SETFONT, (WPARAM)hFont, TRUE);
+		//////////////////////////////////////////////
 		int digit = 0;
 		char sz_digit[2] = "";
 		for (int i = 6; i >= 0; i -= 3)
@@ -118,7 +139,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					NULL,
 					"Button",
 					sz_digit,
-					WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON,
+					WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON|BS_BITMAP,
 					BUTTON_START_X + (BUTTON_SIZE + INTERVAL) * j,
 					BUTTON_START_Y + (BUTTON_SIZE + INTERVAL) * i / 3,
 					BUTTON_SIZE, BUTTON_SIZE,
@@ -132,7 +153,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		CreateWindowEx
 		(
 			NULL, "Button", "0",
-			WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON,
+			WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON|BS_BITMAP,
 			BUTTON_START_X, BUTTON_START_Y + (BUTTON_SIZE + INTERVAL) * 3,
 			BUTTON_DOUBLE_SIZE, BUTTON_SIZE,
 			hwnd,
@@ -143,7 +164,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		CreateWindowEx
 		(
 			NULL, "Button", ".",
-			WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+			WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON|BS_BITMAP,
 			BUTTON_START_X + BUTTON_DOUBLE_SIZE + INTERVAL, BUTTON_START_Y + (BUTTON_SIZE + INTERVAL) * 3,
 			BUTTON_SIZE, BUTTON_SIZE,
 			hwnd,
@@ -156,7 +177,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			CreateWindowEx
 			(
 				NULL, "Button", OPERATIONS[i],
-				WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON,
+				WS_CHILDWINDOW | WS_VISIBLE | BS_PUSHBUTTON|BS_BITMAP,
 				BUTTON_START_X + (BUTTON_SIZE + INTERVAL) * 3, BUTTON_START_Y + (BUTTON_SIZE + INTERVAL) * i,
 				BUTTON_SIZE, BUTTON_SIZE,
 				hwnd,
@@ -197,10 +218,26 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetModuleHandle(NULL),
 			NULL
 		);
+		SetSkin(hwnd, "square_blue");
 	}
 	break;
+	case WM_CTLCOLOREDIT:
+	{
+		
+			HDC hdc = (HDC)wParam;
+			SetBkMode(hdc, OPAQUE);
+			SetBkColor(hdc, RGB(0, 0, 100));
+			HBRUSH hBrush = CreateSolidBrush(RGB(255, 0, 0));
+			SetTextColor(hdc, RGB(255, 0, 0));
+			return(LRESULT)hBrush;
+	}
+		break;
 	case WM_COMMAND:
 	{
+		if (LOWORD(wParam) == IDC_EDIT && HIWORD(wParam) == EN_SETFOCUS)
+		{
+			SetFocus(hwnd);
+		}
 		HWND hEdit = GetDlgItem(hwnd, IDC_EDIT);
 		//				Digits & point
 		if (LOWORD(wParam) >= IDC_BUTTON_0 && LOWORD(wParam) <= IDC_BUTTON_9 || LOWORD(wParam) == IDC_BUTTON_POINT)
@@ -313,4 +350,39 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	default: return DefWindowProc(hwnd, uMsg, wParam, lParam);
 	}
 	return NULL;
+}
+
+VOID SetSkin(HWND hwnd, CONST CHAR sz_skin[])
+{
+	CHAR sz_filename[FILENAME_MAX] = {};//создаем и инициализируем имя файла значка
+	CONST INT SIZE = 10;
+	for (int i = 0; i < SIZE; i++)
+	{
+		HWND hButton = GetDlgItem(hwnd, IDC_BUTTON_0 + i);//берем(получаем) окно кнопки
+		sprintf(sz_filename, "ButtonsBMP\\square_blue\\button_%i.bmp", i);//получили имя файла и записали в файл
+		HBITMAP hBitmap = (HBITMAP)LoadImage
+		(
+			GetModuleHandle(NULL),
+			sz_filename,
+			IMAGE_BITMAP,
+			i > 0 ? BUTTON_SIZE : BUTTON_DOUBLE_SIZE, BUTTON_SIZE,
+			LR_LOADFROMFILE
+		);//загружаем картинку значка
+		SendMessage(hButton, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitmap);//устанавливаем значек на кнопкуfor(int i = 0; i < SIZE; i++)
+	}
+
+	for (int i = 0; i < sizeof(BUTTON_NAMES)/sizeof(BUTTON_NAMES[0]); i++)
+	{
+		HWND hButton = GetDlgItem(hwnd, IDC_BUTTON_POINT + i);//берем(получаем) окно кнопки
+		sprintf(sz_filename, "ButtonsBMP\\square_blue\\button_%s.bmp", BUTTON_NAMES[i]);//получили имя файла и записали в файл
+		HBITMAP hBitmap = (HBITMAP)LoadImage
+		(
+			GetModuleHandle(NULL),
+			sz_filename,
+			IMAGE_BITMAP,
+			i > 0 ? BUTTON_SIZE : BUTTON_DOUBLE_SIZE, BUTTON_SIZE,
+			LR_LOADFROMFILE
+		);//загружаем картинку значка
+		SendMessage(hButton, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hBitmap);//устанавливаем значек на кнопку
+	}
 }
